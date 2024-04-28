@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="deploymentTargetDropDown">
+    <value>
+      <entry key="InstrumentedTests">
+        <State />
+      </entry>
+      <entry key="TestS1">
+        <State>
+          <targetSelectedWithDropDown>
+            <Target>
+              <type value="QUICK_BOOT_TARGET" />
+              <deviceKey>
+                <Key>
+                  <type value="VIRTUAL_DEVICE_PATH" />
+                  <value value="C:\Users\Genius\.android\avd\Pixel_5.avd" />
+                </Key>
+              </deviceKey>
+            </Target>
+          </targetSelectedWithDropDown>
+          <timeTargetWasSelectedWithDropDown value="2024-04-04T17:43:10.283118800Z" />
+        </State>
+      </entry>
+      <entry key="app">
+        <State />
+      </entry>
+      <entry key="testEditTextErrorOnButtonPress()">
+        <State />
+      </entry>
+      <entry key="testJeloIzmjena()">
+        <State />
+      </entry>
+    </value>
+  </component>
+</project>
