@@ -179,13 +179,9 @@ class TrefleDAO{
                         for (plantData in plantResponse.data) {
                             val name = plantData.common_name ?: ""
                             val latinName = plantData.scientific_name ?: ""
-                            if (name.contains(substr, ignoreCase = true) || latinName.contains(
-                                    substr,
-                                    ignoreCase = true
-                                )
+                            if ((name.contains(substr, ignoreCase = true) || latinName.contains(substr, ignoreCase = true) && name.isNotEmpty())
                             ) {
-                                val naziv =
-                                    if (name.isNotEmpty()) "$name ($latinName)" else latinName
+                                val naziv ="$name ($latinName)"
                                 val family = plantData.family ?: ""
 
                                 val foundBiljka = Biljka(
