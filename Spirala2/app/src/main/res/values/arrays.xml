@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="modovi">
-        <item>Medicinski mod</item>
-        <item>Kuharski mod</item>
-        <item>Botanički mod</item>
-    </string-array>
-</resources>
