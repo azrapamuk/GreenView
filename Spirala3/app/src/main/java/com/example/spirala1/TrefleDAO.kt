@@ -30,7 +30,7 @@ import kotlinx.serialization.decodeFromString
 
 class TrefleDAO{
     private val apiKey = BuildConfig.API_KEY
-    private val retrofit = Retrofit.Builder().baseUrl("https://trefle.io/api/v1/")
+    private val retrofit = Retrofit.Builder().baseUrl("http://trefle.io/api/v1/")
         .addConverterFactory(GsonConverterFactory.create()).build()
     private val trefleApi = retrofit.create(TrefleAPI::class.java)
     private lateinit var context: Context
@@ -54,7 +54,7 @@ class TrefleDAO{
                 latinName = matcher.group(1)?.toString() ?: ""
             }
             val query = latinName.replace(" ","%20")
-            val url1 = "https://trefle.io/api/v1/plants?token=$apiKey&filter[scientific_name]=$query"
+            val url1 = "http://trefle.io/api/v1/plants?token=$apiKey&filter[scientific_name]=$query"
             try {
                 val connection1 = URL(url1).openConnection() as HttpURLConnection
                 val inputStream1: InputStream = BufferedInputStream(connection1.inputStream)
@@ -64,7 +64,7 @@ class TrefleDAO{
                     val plantsArray = jsonResponse1.getJSONArray("data")
                     val plantData = plantsArray.getJSONObject(0)
                     val id = plantData.optInt("id", -1).toString()
-                    val url2 = "https://trefle.io/api/v1/plants/$id?token=$apiKey"
+                    val url2 = "http://trefle.io/api/v1/plants/$id?token=$apiKey"
                     try {
                         val connection2 = URL(url2).openConnection() as HttpURLConnection
                         val inputStream2: InputStream = BufferedInputStream(connection2.inputStream)
@@ -170,7 +170,7 @@ class TrefleDAO{
             var biljke = mutableListOf<Biljka>()
             try {
                 for (page in 1..10) {
-                    val url = "https://trefle.io/api/v1/plants?filter[flower_color]=$flower_color&token=$apiKey&page=$page"
+                    val url = "http://trefle.io/api/v1/plants?filter[flower_color]=$flower_color&token=$apiKey&page=$page"
                     val connection = URL(url).openConnection() as HttpURLConnection
                     connection.inputStream.use { inputStream ->
                         val response = inputStream.bufferedReader().use { it.readText() }
