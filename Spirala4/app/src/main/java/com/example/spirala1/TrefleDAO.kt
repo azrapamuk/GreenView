@@ -145,7 +145,8 @@ class TrefleDAO{
                                 profilOkusa =biljka.profilOkusa,
                                 jela = returnJela,
                                 klimatskiTipovi = returnKlima,
-                                zemljisniTipovi = returnZemljista
+                                zemljisniTipovi = returnZemljista,
+                                onlineChecked = true
                             )
 
                         }

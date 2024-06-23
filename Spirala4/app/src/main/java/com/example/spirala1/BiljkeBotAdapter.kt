@@ -48,15 +48,6 @@ class BiljkeBotAdapter(
             temp
         }
 
-        scope.launch {
-            var imageUrl = biljka?.let { trefle.getImage(it) }
-            Glide.with(holder.itemView.context)
-                .load(imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.biljka)
-                .into(holder.biljkaImage)
-        }
-
         if (biljka != null) {
             holder.biljkaPorodica.text=biljka.porodica
         }
@@ -71,6 +62,21 @@ class BiljkeBotAdapter(
         holder.itemView.setOnClickListener{
             val filtriraneBiljke=filtriraj(biljka,listaBiljki)
             updateBiljke(filtriraneBiljke.toList())
+        }
+
+        val biljkaDAO = BiljkaDatabase.getDatabase(context).biljkaDao()
+
+        var id = biljka?.id
+        CoroutineScope(Dispatchers.Main).launch {
+            var slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            if (slikaBitmap==null) {
+                val webImg = biljka?.let { trefle.getImage(it) }
+                if (webImg != null && id!=null) {
+                    biljkaDAO.addImage(id,webImg)
+                }
+                slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            }
+            holder.biljkaImage.setImageBitmap(slikaBitmap)
         }
     }
 

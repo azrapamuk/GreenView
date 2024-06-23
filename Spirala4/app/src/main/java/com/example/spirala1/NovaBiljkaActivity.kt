@@ -241,7 +241,8 @@ class NovaBiljkaActivity : AppCompatActivity() {
                     profilOkusa =okusValue,
                     jela =jela,
                     klimatskiTipovi =klimaValues,
-                    zemljisniTipovi =zemljisteValues
+                    zemljisniTipovi =zemljisteValues,
+                    onlineChecked = false
                 )
                 val resultIntent = Intent()
                 resultIntent.putExtra("novaBiljka", biljka)

@@ -1,6 +1,7 @@
 package com.example.spirala1
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,24 +50,15 @@ class BiljkeKuhAdapter(
             temp
         }
 
-        scope.launch {
-            var imageUrl = biljka?.let { trefle.getImage(it) }
-            Glide.with(holder.itemView.context)
-                .load(imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.biljka)
-                .into(holder.biljkaImage)
-        }
-
         if (biljka != null) {
-            holder.biljkaOkus.text=biljka.profilOkusa.opis
+            holder.biljkaOkus.text=biljka.profilOkusa?.opis
         }
         if (biljka != null) {
             if((biljka.jela?.size ?: 0) > 0) {
                 holder.biljkaJelo1.text = biljka.jela?.get(0) ?:""
             }
             else{
-                holder.biljkaJelo1.text ="N/A"
+                holder.biljkaJelo1.text =" "
             }
         }
         if (biljka != null) {
@@ -74,7 +66,7 @@ class BiljkeKuhAdapter(
                 holder.biljkaJelo2.text = biljka.jela?.get(1) ?:""
             }
             else{
-                holder.biljkaJelo2.text ="N/A"
+                holder.biljkaJelo2.text =" "
             }
         }
         if (biljka != null) {
@@ -82,7 +74,7 @@ class BiljkeKuhAdapter(
                 holder.biljkaJelo3.text = biljka.jela?.get(2) ?: ""
             }
             else{
-                holder.biljkaJelo3.text ="N/A"
+                holder.biljkaJelo3.text =" "
             }
         }
 
@@ -90,6 +82,21 @@ class BiljkeKuhAdapter(
         holder.itemView.setOnClickListener{
             val filtriraneBiljke=filtriraj(biljka,listaBiljki)
             updateBiljke(filtriraneBiljke.toList())
+        }
+
+        val biljkaDAO = BiljkaDatabase.getDatabase(context).biljkaDao()
+
+        var id = biljka?.id
+        CoroutineScope(Dispatchers.Main).launch {
+            var slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            if (slikaBitmap==null) {
+                val webImg = biljka?.let { trefle.getImage(it) }
+                if (webImg != null && id!=null) {
+                    biljkaDAO.addImage(id,webImg)
+                }
+                slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            }
+            holder.biljkaImage.setImageBitmap(slikaBitmap)
         }
     }
 
@@ -114,7 +121,7 @@ class BiljkeKuhAdapter(
         val filteredLista = listaBiljki.filter { biljkaIzListe ->
             biljkaIzListe?.jela?.any { jelaIzListe ->
                 trenutnaBiljka?.jela?.any { trenutnoJelo ->
-                    trenutnoJelo == jelaIzListe || biljkaIzListe.profilOkusa.opis==trenutnaBiljka.profilOkusa.opis
+                    trenutnoJelo == jelaIzListe || biljkaIzListe.profilOkusa?.opis==trenutnaBiljka.profilOkusa?.opis
                 } ?: true
             } ?: true
         }.toMutableList()

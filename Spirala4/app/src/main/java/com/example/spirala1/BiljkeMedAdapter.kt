@@ -2,6 +2,7 @@ package com.example.spirala1
 
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,7 +26,7 @@ class BiljkeMedAdapter(
     }
 
 
-    private val scope = CoroutineScope(Job() + Dispatchers.Main)
+    //private val scope = CoroutineScope(Job() + Dispatchers.Main)
     private var trefle= TrefleDAO().apply {
         setContext(context)
     }
@@ -53,15 +54,6 @@ class BiljkeMedAdapter(
 
         if (biljka != null) {
             holder.biljkaUpozorenje.text = biljka.medicinskoUpozorenje
-        }
-
-        scope.launch {
-            var imageUrl = biljka?.let { trefle.getImage(it) }
-            Glide.with(holder.itemView.context)
-                .load(imageUrl)
-                .centerCrop()
-                .placeholder(R.drawable.biljka)
-                .into(holder.biljkaImage)
         }
 
         var tekst = biljka?.medicinskeKoristi?.get(0)?.opis
@@ -116,6 +108,21 @@ class BiljkeMedAdapter(
         holder.itemView.setOnClickListener {
             val filtriraneBiljke = filtriraj(biljka, listaBiljki)
             updateBiljke(filtriraneBiljke.toList())
+        }
+
+        val biljkaDAO = BiljkaDatabase.getDatabase(context).biljkaDao()
+
+        var id = biljka?.id
+        CoroutineScope(Dispatchers.Main).launch {
+            var slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            if (slikaBitmap==null) {
+                val webImg = biljka?.let { trefle.getImage(it) }
+                if (webImg != null && id!=null) {
+                    biljkaDAO.addImage(id,webImg)
+                }
+                slikaBitmap = id?.let { biljkaDAO.getBitmap(it) }
+            }
+            holder.biljkaImage.setImageBitmap(slikaBitmap)
         }
 
     }
