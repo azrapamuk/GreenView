@@ -31,16 +31,16 @@ interface BiljkaDAO {
 
     @Update
     suspend fun updateBiljka(biljka: Biljka)
-
+/*
     @Query("SELECT bitmap FROM BiljkaBitmap WHERE idBiljke = :idBiljke")
     suspend fun getBitmapById(idBiljke: Long): String?
 
-    suspend fun getBitmap(id: Long): Bitmap? {
+   suspend fun getBitmap(id: Long): Bitmap? {
         val bitmapString=getBitmapById(id)
         val bitmapBiljka= bitmapString?.let { Converters().toBitmap(it) };
         return bitmapBiljka
     }
-
+*/
     suspend fun saveBiljka(biljka: Biljka): Boolean = withContext(Dispatchers.IO) {
         try {
             insertBiljka(biljka) > 0
@@ -87,7 +87,7 @@ interface BiljkaDAO {
             val existingImage = getBiljkaBitmapById(idBiljke)
 
             if (biljka != null && existingImage == null) {
-                val biljkaBitmapEntity = BiljkaBitmap(id = null, idBiljke = idBiljke, bitmap = Converters().fromBitmap(bitmap))
+                val biljkaBitmapEntity = BiljkaBitmap(id = null, idBiljke = idBiljke, bitmap = bitmap)
                 insertBiljkaBitmap(biljkaBitmapEntity) > 0
             } else {
                 false

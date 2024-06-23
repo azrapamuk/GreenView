@@ -1,6 +1,8 @@
 package com.example.spirala1
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.AsyncTask
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +14,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class BiljkeBotAdapter(
     private var biljke: List<Biljka?>, private var context: Context
@@ -63,7 +67,7 @@ class BiljkeBotAdapter(
             val filtriraneBiljke=filtriraj(biljka,listaBiljki)
             updateBiljke(filtriraneBiljke.toList())
         }
-
+/*
         val biljkaDAO = BiljkaDatabase.getDatabase(context).biljkaDao()
 
         var id = biljka?.id
@@ -78,8 +82,52 @@ class BiljkeBotAdapter(
             }
             holder.biljkaImage.setImageBitmap(slikaBitmap)
         }
-    }
 
+
+    }*/
+
+        if (biljka != null) {
+            UcitajSliku(holder.biljkaImage, biljka).execute()
+        }
+
+    }
+    val biljkaDAO = BiljkaDatabase.getDatabase(context).biljkaDao()
+    private inner class UcitajSliku(
+        private val imageView: ImageView,
+        private val biljka: Biljka
+    ) : AsyncTask<Void, Void, Bitmap?>() {
+
+        override fun doInBackground(vararg params: Void?): Bitmap? {
+            return getSlika(biljka)
+        }
+
+        override fun onPostExecute(result: Bitmap?) {
+            if (result != null) {
+                imageView.setImageBitmap(result)
+            } else {
+                imageView.setImageResource(R.drawable.biljka)
+            }
+        }
+
+        private fun getSlika(biljka: Biljka): Bitmap? {
+            return runBlocking {
+                withContext(Dispatchers.IO) {
+                    try {
+                        val biljkaBitmap = biljka.id?.let { biljkaDAO.getBiljkaBitmapById(it) }
+                        if (biljkaBitmap != null) {
+                            return@withContext biljkaBitmap.bitmap
+                        }
+                        val bitmap = trefle.getImage(biljka)
+                        biljka.id?.let { biljkaDAO.addImage(it, bitmap) }
+                        bitmap
+                    } catch (e: Exception) {
+                        null
+                    }
+                }
+            }
+        }
+
+    }
     fun updateBiljke(biljkeNew: List<Biljka?>) {
         listaBiljki= biljkeNew.toMutableList()
         notifyDataSetChanged()

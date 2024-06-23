@@ -145,6 +145,7 @@ class MainActivity : AppCompatActivity() {
             newBiljkaButton.setOnClickListener {
                 val intent = Intent(this@MainActivity, NovaBiljkaActivity::class.java)
                 startActivityForResult(intent, NEW_PLANT_REQUEST_CODE)
+                resetList()
             }
         }
     }

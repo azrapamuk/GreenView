@@ -18,7 +18,7 @@ import androidx.room.ForeignKey
 data class BiljkaBitmap(
     @PrimaryKey(autoGenerate = true) var id: Long? = null,
     @ColumnInfo var idBiljke: Long,
-    @ColumnInfo(name = "bitmap") var bitmap: String
+    @ColumnInfo(name = "bitmap") var bitmap: Bitmap
 
 )
 
