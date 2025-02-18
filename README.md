@@ -6,8 +6,7 @@
 
 GreenView is an Android application developed using Kotlin, designed to provide users with easy access to detailed plant information via the Trefle.io API. The app features three distinct modes — **Medical**, **Culinary**, and **Botanical** — to cater to different interests and needs. Users can explore plant information relevant to each mode, and even add new plants to the database for future reference.
 
-![GreenView](https://github.com/user-attachments/assets/d65384ff-d447-4c51-86e4-2072b1b6a54b)
-
+![GreenView](https://github.com/user-attachments/assets/084eb2cf-d4cf-4d9a-844c-1faf89520204)
 
 ## Key Features
 
